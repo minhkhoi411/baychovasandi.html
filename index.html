@@ -1,0 +1,10 @@
+// 1. Để trống Token theo đúng yêu cầu bảo mật của thầy
+let AIRTABLE_TOKEN = ''; 
+
+// 2. Nếu Token để trống, hiển thị ô hỏi người dùng nhập Token khi mở trang
+if (!AIRTABLE_TOKEN) {
+  AIRTABLE_TOKEN = prompt("Vui lòng nhập Airtable Personal Access Token (pat...):");
+}
+
+const BASE_ID = 'appcdWDPJL78XOuh'; 
+const TABLE_NAME = encodeURIComponent('Table 1');
