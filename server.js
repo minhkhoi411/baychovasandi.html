@@ -8,7 +8,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('.'));
+app.use(express.static("."));
 
 const PORT = process.env.PORT || 3000;
 
@@ -16,7 +16,7 @@ const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
 const BASE_ID = process.env.AIRTABLE_BASE_ID;
 const TABLE_NAME = process.env.AIRTABLE_TABLE_NAME;
 
-// Kiểm tra cấu hình
+// Kiểm tra backend
 app.get("/api/health", (req, res) => {
   res.json({
     success: true,
@@ -24,7 +24,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Lấy sản phẩm từ Airtable
+// Lấy dữ liệu sản phẩm từ Airtable mới
 app.get("/api/products", async (req, res) => {
   try {
     if (!AIRTABLE_TOKEN || !BASE_ID || !TABLE_NAME) {
@@ -52,12 +52,14 @@ app.get("/api/products", async (req, res) => {
       });
     }
 
+    const products = data.records.map(record => ({
+      id: record.id,
+      ...record.fields
+    }));
+
     res.json({
       success: true,
-      products: data.records.map(record => ({
-        id: record.id,
-        ...record.fields
-      }))
+      products
     });
 
   } catch (error) {
@@ -73,4 +75,3 @@ app.get("/api/products", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server đang chạy tại http://localhost:${PORT}`);
 });
-
