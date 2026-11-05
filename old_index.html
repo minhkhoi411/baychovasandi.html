@@ -1,0 +1,57 @@
+<script>
+async function fetchProducts() {
+    const grid = document.getElementById("product-grid");
+
+    try {
+        const response = await fetch(
+            'https://baychovasandi-html.onrender.com/api/products'
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Không tải được dữ liệu");
+        }
+
+        const products = data.products;
+
+        grid.innerHTML = products.map(item => {
+            const image = item["Attachment Summary"] || "";
+            const name = item.Product || "Sản phẩm";
+            const price = item.Price || "";
+            const salePrice = item.Sale_price || "";
+            const status = item.Status || "";
+            const promotion = item["Ưu đãi"] || "";
+
+            return `
+                <div class="product-card">
+                    <img
+                        src="${image}"
+                        alt="${name}"
+                        onerror="this.style.display='none'"
+                    >
+
+                    <h3>${name}</h3>
+
+                    <p>Giá gốc: ${price}</p>
+
+                    <p>Giá bán: ${salePrice}</p>
+
+                    <p>Ưu đãi: ${promotion}</p>
+
+                    <p>Trạng thái: ${status}</p>
+                </div>
+            `;
+        }).join("");
+
+    } catch (error) {
+        console.error(error);
+
+        grid.innerHTML = `
+            <p>Không thể tải dữ liệu sản phẩm.</p>
+        `;
+    }
+}
+
+fetchProducts();
+</script>
